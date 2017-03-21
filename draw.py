@@ -3,12 +3,28 @@ from matrix import *
 
 
 def add_circle( points, cx, cy, cz, r, step ):
+    t = 0
+    while( t < 1 ):
+        x0 = cx + r * math.cos( 2 * math.pi * t )
+        x1 = cx + r * math.cos( 2 * math.pi * t )
+        y0 = cy + r * math.sin( 2 * math.pi * ( t + step ) )
+        y1 = cy + r * math.sin( 2 * math.pi * ( t + step ) )
+        add_edge( points, x0, y0, cz, x1, y1, cz )
+        t += step
     pass
 
 def add_curve( points, x0, y0, x1, y1, x2, y2, x3, y3, step, curve_type ):
+    coefsx = generate_curve_coefs( x0, x1, x2, x3, curve_type )
+    coefsy = generate_curve_coefs( y0, y1, y2, y3, curve_type )
+    t = 0
+    while( t < 1 ):
+        x = coefsx[0][0] * (t ** 3) + coefsx[0][1] * (t ** 2) + coefsx[0][2] * t + coefsx[0][3]
+        xn = coefsx[0][0] * ((t + step) ** 3) + coefsx[0][1] * ((t + step) ** 2) + coefsx[0][2] * (t + step) + coefsx[0][3]
+        y = coefsy[0][0] * (t ** 3) + coefsy[0][1] * (t ** 2) + coefsy[0][2] * t + coefsy[0][3]
+        yn = coefsy[0][0] * ((t + step) ** 3) + coefsy[0][1] * ((t + step) ** 2) + coefsy[0][2] * (t + step) + coefsy[0][3]
+        add_edge( points, x, y, 0, xn, yn, 0 )
+        t += step
     pass
-
-
 
 def draw_lines( matrix, screen, color ):
     if len(matrix) < 2:

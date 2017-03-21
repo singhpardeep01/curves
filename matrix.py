@@ -1,12 +1,27 @@
 import math
 
 def make_bezier():
+    return [ [-1, 3, -3, 1],
+             [3, -6, 3, 0],
+             [-3, 3, 0, 0],
+             [1, 0, 0, 0] ]
     pass
 
 def make_hermite():
+    return [ [2, -3, 0, 1],
+             [-2, 3, 0, 0],
+             [1, -2, 1, 0],
+             [1, -1, 0, 0] ]
     pass
-
 def generate_curve_coefs( p1, p2, p3, p4, t ):
+    if ( t == "bezier" ):
+        matrix = [ [p1, p2, p3, p4] ]
+        matrix_mult( make_bezier(), matrix )
+        return matrix
+    if ( t == "hermite" ):
+        matrix = [ [p1, p2, p3, p4] ]
+        matrix_mult( make_hermite(), matrix )
+        return matrix
     pass
 
 
@@ -60,7 +75,6 @@ def print_matrix( matrix ):
             s+= str(matrix[c][r]) + ' '
         s+= '\n'
     print s
-
 def ident( matrix ):
     for r in range( len( matrix[0] ) ):
         for c in range( len(matrix) ):
@@ -76,7 +90,7 @@ def scalar_mult( matrix, s ):
             
 #m1 * m2 -> m2
 def matrix_mult( m1, m2 ):
-
+    
     point = 0
     for row in m2:
         #get a copy of the next point
@@ -88,6 +102,7 @@ def matrix_mult( m1, m2 ):
                             m1[2][r] * tmp[2] +
                             m1[3][r] * tmp[3])
         point+= 1
+    pass
 
 
 def new_matrix(rows = 4, cols = 4):
